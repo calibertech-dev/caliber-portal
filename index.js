@@ -30,6 +30,24 @@ app.get('/whoami', async (req, res) => {
   res.json({ contact });
 });
 
+app.get('/', (req, res) => {
+  if (req.oidc.isAuthenticated()) {
+    res.send(`
+      <h1>Welcome to Caliber Portal</h1>
+      <p>You are logged in as: ${req.oidc.user.email}</p>
+      <p><a href="/whoami">View My Salesforce Contact Info</a></p>
+      <p><a href="/logout">Logout</a></p>
+    `);
+  } else {
+    res.send(`
+      <h1>Welcome to Caliber Portal</h1>
+      <p>You are not logged in.</p>
+      <p><a href="/login">Login with Auth0</a></p>
+    `);
+  }
+});
+
+
 app.listen(process.env.PORT || 3000, () => {
   console.log('Caliber Portal running');
 });
