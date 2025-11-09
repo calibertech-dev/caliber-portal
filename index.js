@@ -15,22 +15,6 @@ app.use(auth({
 }));
 
 app.get('/', (req, res) => {
-  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
-});
-
-app.get('/whoami', async (req, res) => {
-  if (!req.oidc.isAuthenticated()) return res.json({ user: null });
-  const conn = new jsforce.Connection({
-    loginUrl: process.env.SF_LOGIN_URL,
-  });
-  await conn.login(process.env.SF_USERNAME, process.env.SF_PASSWORD);
-  const contact = await conn.sobject('Contact').findOne({
-    Auth0_User_Id__c: req.oidc.user.sub
-  });
-  res.json({ contact });
-});
-
-app.get('/', (req, res) => {
   if (req.oidc.isAuthenticated()) {
     res.send(`
       <h1>Welcome to Caliber Portal</h1>
@@ -47,6 +31,17 @@ app.get('/', (req, res) => {
   }
 });
 
+app.get('/whoami', async (req, res) => {
+  if (!req.oidc.isAuthenticated()) return res.json({ user: null });
+  const conn = new jsforce.Connection({
+    loginUrl: process.env.SF_LOGIN_URL,
+  });
+  await conn.login(process.env.SF_USERNAME, process.env.SF_PASSWORD);
+  const contact = await conn.sobject('Contact').findOne({
+    Auth0_User_Id__c: req.oidc.user.sub
+  });
+  res.json({ contact });
+});
 
 app.listen(process.env.PORT || 3000, () => {
   console.log('Caliber Portal running');
