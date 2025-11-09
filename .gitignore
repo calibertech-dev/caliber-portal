@@ -1,0 +1,21 @@
+# Node modules
+node_modules/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+*.local
+*.env.local
+
+# Logs
+*.log
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Misc
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
