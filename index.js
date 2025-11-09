@@ -14,14 +14,16 @@ app.use(auth({
   issuerBaseURL: process.env.AUTH0_DOMAIN,
 }));
 
+app.get('/', (req, res) => {
+  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+});
+
 app.get('/whoami', async (req, res) => {
   if (!req.oidc.isAuthenticated()) return res.json({ user: null });
-  // Connect to Salesforce using jsforce with integration user
   const conn = new jsforce.Connection({
     loginUrl: process.env.SF_LOGIN_URL,
   });
   await conn.login(process.env.SF_USERNAME, process.env.SF_PASSWORD);
-  // Query Contact by Auth0 User Id
   const contact = await conn.sobject('Contact').findOne({
     Auth0_User_Id__c: req.oidc.user.sub
   });
