@@ -12,4 +12,3 @@ If you wish to request permissions beyond those provided above, please contact t
 
 ---
 This is a restrictive, source-available license and is NOT considered an "open source" license by the Open Source Initiative.
-
